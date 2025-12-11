@@ -1,0 +1,30 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1d4ed8"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="bubble" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#e5e7eb"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background with rounded corners -->
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
+  
+  <!-- Message bubble -->
+  <g transform="translate(180, 200)">
+    <!-- Main bubble -->
+    <path d="M60 0 H600 Q664 0 664 60 V380 Q664 440 600 440 H200 L100 540 L100 440 H60 Q0 440 0 380 V60 Q0 0 60 0 Z" 
+          fill="url(#bubble)" 
+          opacity="0.95"/>
+    
+    <!-- Search icon inside bubble -->
+    <g transform="translate(230, 140)">
+      <circle cx="80" cy="80" r="65" stroke="#1d4ed8" stroke-width="24" fill="none"/>
+      <line x1="130" y1="130" x2="190" y2="190" stroke="#1d4ed8" stroke-width="24" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>
+

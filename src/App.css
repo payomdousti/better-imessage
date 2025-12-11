@@ -1,0 +1,397 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+  
+  /* Clean Dark Theme */
+  --color-background: hsl(220 13% 9%);
+  --color-foreground: hsl(210 20% 92%);
+  
+  --color-card: hsl(220 13% 11%);
+  --color-card-foreground: hsl(210 20% 92%);
+  
+  --color-popover: hsl(220 13% 12%);
+  --color-popover-foreground: hsl(210 20% 92%);
+  
+  --color-border: hsl(220 10% 16%);
+  --color-input: hsl(220 10% 16%);
+  
+  --color-muted: hsl(220 10% 13%);
+  --color-muted-foreground: hsl(220 8% 50%);
+  
+  --color-accent: hsl(220 10% 15%);
+  --color-accent-foreground: hsl(210 20% 92%);
+  
+  /* Blue accent - iMessage style */
+  --color-primary: hsl(211 100% 50%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  
+  /* Message bubbles */
+  --color-bubble-sent: hsl(211 100% 50%);
+  --color-bubble-received: hsl(220 10% 18%);
+
+  --animate-highlight-pulse: highlight-pulse 1.5s ease-in-out 2;
+  
+  @keyframes highlight-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+    50% { box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3); }
+  }
+}
+
+/* Base styles */
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Form elements
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.input {
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-input);
+  background-color: var(--color-muted);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px hsl(211 100% 50% / 0.15);
+}
+
+.input::placeholder {
+  color: var(--color-muted-foreground);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  height: 2.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.15s ease-out;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+.btn-primary:hover {
+  background-color: hsl(211 100% 45%);
+}
+
+.btn-outline {
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-foreground);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-accent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Scrollbar
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(220 10% 22%) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: hsl(220 10% 20%);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(220 10% 28%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Conversation list
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.conversation-item {
+  transition: background-color 0.1s ease-out;
+}
+
+.conversation-item:hover {
+  background-color: var(--color-accent);
+}
+
+.conversation-item.active {
+  background-color: var(--color-accent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Message groups - CSS-based performance optimization
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.message-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Use content-visibility for automatic virtualization */
+.message-groups > * {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 80px;
+}
+
+.message-bubble {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 50px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Scroll to bottom button
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.scroll-to-bottom-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 10;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  opacity: 0;
+  transform: translateY(8px) scale(0.95);
+  pointer-events: none;
+}
+
+.scroll-to-bottom-btn[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.scroll-to-bottom-btn:hover {
+  background-color: hsl(211 100% 45%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Loading skeleton
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-muted);
+  border-radius: 0.375rem;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(220 10% 17% / 0.5) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+  transform: translateX(-100%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Progress bar
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.progress-bar {
+  height: 0.25rem;
+  background-color: var(--color-muted);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 9999px;
+  transition: width 0.3s ease-out;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Glass overlay
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.glass {
+  background: hsl(220 13% 9% / 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Links
+   ───────────────────────────────────────────────────────────────────────────── */
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Skeleton Loading States
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@keyframes skeleton-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.skeleton-pulse {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(220 10% 25% / 0.4) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  transform: translateX(-100%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Content Transitions
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Smooth content fade-in */
+.content-enter {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.content-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 150ms ease-out, transform 150ms ease-out;
+}
+
+/* Fade-in for lazy loaded content */
+.fade-in {
+  animation: fadeIn 150ms ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Image loading placeholder */
+.img-loading {
+  background: var(--color-muted);
+  position: relative;
+}
+
+.img-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(220 10% 25% / 0.3) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Accessibility
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .skeleton-pulse::after {
+    animation: none;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
