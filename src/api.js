@@ -3,7 +3,15 @@
  * @module api
  */
 
-const API_BASE = '';
+// On mobile (Capacitor), connect to Mac via Nord Meshnet
+// On desktop (Electron), use local server
+const isMobile = typeof window !== 'undefined' && 
+  window.Capacitor?.isNativePlatform?.();
+
+// Your Mac's Nord Meshnet address
+const NORD_MESHNET_URL = 'http://payom-alps.nord:3000';
+
+const API_BASE = isMobile ? NORD_MESHNET_URL : '';
 
 // ============================================================
 // API request helpers

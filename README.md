@@ -40,10 +40,10 @@ The `.dmg` will be in the `dist/` folder.
 
 ```bash
 # Start the server
-npm run server
+npm start
 
-# In another terminal, start webpack dev server
-npm run dev
+# In another terminal, build with watch mode
+npm run build:dev
 
 # Run tests
 npm test
