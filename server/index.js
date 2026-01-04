@@ -16,6 +16,17 @@ const logger = require('./helpers/logger');
 
 const app = express();
 
+// Enable CORS for mobile app access
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // Initialize cache directories
 initCacheDirectories();
 
